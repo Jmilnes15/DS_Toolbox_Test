@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NCAA Wrestling Tracker — Architecture Infographic</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #0c1222;
+    color: #e0e6ed;
+    line-height: 1.5;
+    overflow-x: hidden;
+  }
+
+  /* ========== HERO ========== */
+  .hero {
+    background: linear-gradient(135deg, #0f1a2e 0%, #1a2744 40%, #2a3f6a 100%);
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    border-bottom: 4px solid #c5a030;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(ellipse at 30% 50%, rgba(197,160,48,0.08) 0%, transparent 60%);
+  }
+  .hero h1 {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.5px;
+    position: relative;
+  }
+  .hero h1 span { color: #c5a030; }
+  .hero .subtitle {
+    font-size: 1.05rem;
+    color: rgba(255,255,255,0.65);
+    margin-top: 0.5rem;
+    font-weight: 400;
+    position: relative;
+  }
+  .hero .tech-badges {
+    margin-top: 1.2rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    position: relative;
+  }
+  .tech-badge {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 20px;
+    padding: 0.3rem 0.8rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.75);
+    backdrop-filter: blur(4px);
+  }
+
+  /* ========== CONTAINER ========== */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 3rem;
+  }
+
+  /* ========== FLOW ARROW (between sections) ========== */
+  .flow-connector {
+    text-align: center;
+    padding: 1.5rem 0;
+    position: relative;
+  }
+  .flow-connector .arrow {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  .flow-connector .arrow-line {
+    width: 3px;
+    height: 32px;
+    background: linear-gradient(to bottom, #c5a030, #e0c45a);
+    border-radius: 2px;
+  }
+  .flow-connector .arrow-head {
+    width: 0; height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 10px solid #e0c45a;
+  }
+  .flow-connector .arrow-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #c5a030;
+    margin-top: 0.2rem;
+  }
+
+  /* ========== SECTION ========== */
+  .section {
+    margin-bottom: 0;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  .section-number {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #c5a030, #e0c45a);
+    color: #1a2744;
+    font-weight: 800;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #fff;
+  }
+  .section-desc {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.5);
+    margin-left: 0.5rem;
+  }
+
+  /* ========== CARDS ========== */
+  .card-grid {
+    display: grid;
+    gap: 0.75rem;
+  }
+  .card-grid.two-col { grid-template-columns: 1fr 1fr; }
+  .card-grid.three-col { grid-template-columns: 1fr 1fr 1fr; }
+  .card-grid.single { grid-template-columns: 1fr; }
+
+  .card {
+    background: #141d30;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 1.25rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .card:hover {
+    border-color: rgba(197,160,48,0.3);
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    border-radius: 12px 12px 0 0;
+  }
+  .card.api::before { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+  .card.transform::before { background: linear-gradient(90deg, #8b5cf6, #a78bfa); }
+  .card.pin::before { background: linear-gradient(90deg, #c5a030, #e0c45a); }
+  .card.connect::before { background: linear-gradient(90deg, #0ea5e9, #38bdf8); }
+  .card.app::before { background: linear-gradient(90deg, #10b981, #34d399); }
+  .card.quarto::before { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+
+  .card-icon {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+  }
+  .card h3 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.4rem;
+  }
+  .card p {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.5;
+  }
+  .card .detail-list {
+    list-style: none;
+    margin-top: 0.6rem;
+    padding: 0;
+  }
+  .card .detail-list li {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.5);
+    padding: 0.15rem 0;
+    padding-left: 1rem;
+    position: relative;
+  }
+  .card .detail-list li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: #c5a030;
+    font-weight: 700;
+  }
+  .card .tag {
+    display: inline-block;
+    background: rgba(197,160,48,0.12);
+    color: #e0c45a;
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    margin-top: 0.5rem;
+  }
+  .card .tag.blue { background: rgba(59,130,246,0.12); color: #60a5fa; }
+  .card .tag.purple { background: rgba(139,92,246,0.12); color: #a78bfa; }
+  .card .tag.green { background: rgba(16,185,129,0.12); color: #34d399; }
+  .card .tag.cyan { background: rgba(14,165,233,0.12); color: #38bdf8; }
+  .card .tag.orange { background: rgba(245,158,11,0.12); color: #fbbf24; }
+
+  /* ========== WIDE CARD (Connect board) ========== */
+  .wide-card {
+    background: linear-gradient(135deg, #1a2744 0%, #1e3050 100%);
+    border: 2px solid rgba(197,160,48,0.25);
+    border-radius: 14px;
+    padding: 1.5rem 2rem;
+    text-align: center;
+    position: relative;
+  }
+  .wide-card h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.3rem;
+  }
+  .wide-card p {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 1rem;
+  }
+  .pin-grid {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .pin-chip {
+    background: rgba(197,160,48,0.1);
+    border: 1px solid rgba(197,160,48,0.25);
+    border-radius: 8px;
+    padding: 0.4rem 0.7rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #e0c45a;
+    font-family: 'Courier New', monospace;
+  }
+
+  /* ========== CONNECT VALUE PROPS ========== */
+  .value-prop-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+  .value-prop {
+    background: rgba(14,165,233,0.05);
+    border: 1px solid rgba(14,165,233,0.15);
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: center;
+  }
+  .value-prop .vp-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.4rem;
+  }
+  .value-prop h4 {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #38bdf8;
+    margin-bottom: 0.3rem;
+  }
+  .value-prop p {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.4;
+  }
+
+  /* ========== HORIZONTAL FLOW (inside Connect) ========== */
+  .h-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin: 1.5rem 0;
+    flex-wrap: wrap;
+  }
+  .h-flow-item {
+    background: #141d30;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 0.8rem 1.2rem;
+    text-align: center;
+    min-width: 140px;
+  }
+  .h-flow-item h4 {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.2rem;
+  }
+  .h-flow-item p {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.4);
+  }
+  .h-flow-arrow {
+    font-size: 1.2rem;
+    color: #c5a030;
+    padding: 0 0.5rem;
+    font-weight: 700;
+  }
+
+  /* ========== DEPLOYMENT SECTION ========== */
+  .deploy-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.75rem;
+  }
+  .deploy-card {
+    background: #141d30;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    position: relative;
+  }
+  .deploy-card .deploy-num {
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    background: #c5a030;
+    color: #1a2744;
+    font-weight: 800;
+    font-size: 0.7rem;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .deploy-card h4 {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.2rem;
+  }
+  .deploy-card .cmd {
+    font-family: 'Courier New', monospace;
+    font-size: 0.68rem;
+    color: #34d399;
+    background: rgba(16,185,129,0.08);
+    padding: 0.4rem 0.6rem;
+    border-radius: 6px;
+    margin-top: 0.4rem;
+    line-height: 1.4;
+    word-break: break-all;
+  }
+  .deploy-card p {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.45);
+    margin-top: 0.3rem;
+  }
+
+  /* ========== FOOTER ========== */
+  .footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.25);
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  /* ========== RESPONSIVE ========== */
+  @media (max-width: 768px) {
+    .card-grid.two-col, .card-grid.three-col { grid-template-columns: 1fr; }
+    .value-prop-grid { grid-template-columns: 1fr; }
+    .deploy-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 1.6rem; }
+    .h-flow { flex-direction: column; }
+    .h-flow-arrow { transform: rotate(90deg); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== HERO ==================== -->
+<div class="hero">
+  <h1>NCAA Wrestling <span>Tracker</span></h1>
+  <p class="subtitle">End-to-End Data Workflow Architecture</p>
+  <div class="tech-badges">
+    <span class="tech-badge">Shiny for Python</span>
+    <span class="tech-badge">Posit Connect</span>
+    <span class="tech-badge">Posit Pins</span>
+    <span class="tech-badge">Quarto</span>
+    <span class="tech-badge">NCAA API</span>
+    <span class="tech-badge">httpx</span>
+    <span class="tech-badge">pandas</span>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ==================== 1. DATA SOURCES ==================== -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-number">1</div>
+    <div>
+      <div class="section-title">External Data Sources</div>
+      <div class="section-desc">Public APIs serving live NCAA wrestling data</div>
+    </div>
+  </div>
+  <div class="card-grid two-col">
+    <div class="card api">
+      <div class="card-icon">&#127760;</div>
+      <h3>NCAA API</h3>
+      <p>Community-maintained mirror of NCAA.com that returns clean JSON instead of HTML. Covers all D1 sports.</p>
+      <ul class="detail-list">
+        <li><strong>Scoreboard</strong> — live &amp; final scores by date</li>
+        <li><strong>Rankings</strong> — NWCA Coaches Poll (current)</li>
+        <li><strong>Standings</strong> — conference W/L by season</li>
+        <li><strong>Team Stats</strong> — winning pct, falls, tech falls</li>
+        <li><strong>Individual Stats</strong> — wrestler wins, records</li>
+        <li><strong>Schools Index</strong> — all NCAA school names/slugs</li>
+        <li><strong>Game Detail</strong> — box scores, play-by-play, scoring</li>
+      </ul>
+      <span class="tag blue">ncaa-api.henrygd.me</span>
+      <span class="tag blue">Rate limit: 5 req/s</span>
+    </div>
+    <div class="card api">
+      <div class="card-icon">&#127942;</div>
+      <h3>OpenTW API</h3>
+      <p>Middleware that parses TrackWrestling tournament pages into structured JSON. Powers bracket visualization.</p>
+      <ul class="detail-list">
+        <li><strong>Tournament Details</strong> — event metadata</li>
+        <li><strong>Match Assignments</strong> — bout schedules &amp; status</li>
+        <li><strong>Bracket Data</strong> — full bracket trees by weight class</li>
+      </ul>
+      <span class="tag blue">opentw-api.henrygd.me</span>
+      <span class="tag blue">TrackWrestling Parser</span>
+    </div>
+  </div>
+</div>
+
+<!-- CONNECTOR -->
+<div class="flow-connector">
+  <div class="arrow">
+    <div class="arrow-line"></div>
+    <div class="arrow-head"></div>
+    <div class="arrow-label">JSON Responses via httpx</div>
+  </div>
+</div>
+
+<!-- ==================== 2. ETL LAYER ==================== -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-number">2</div>
+    <div>
+      <div class="section-title">ETL Pipeline</div>
+      <div class="section-desc">Python modules that fetch, transform, and load data</div>
+    </div>
+  </div>
+
+  <!-- API Clients -->
+  <div class="card-grid two-col" style="margin-bottom:0.75rem;">
+    <div class="card transform">
+      <h3>NCAAApiClient</h3>
+      <p>Handles all NCAA API calls with built-in rate limiting (0.22s between requests), configurable timeout, and automatic pagination for stats endpoints.</p>
+      <ul class="detail-list">
+        <li>13 endpoint methods covering scores, rankings, stats, schools</li>
+        <li><code>get_scoreboard_range()</code> iterates dates and merges games</li>
+        <li><code>get_all_team_stats()</code> auto-paginates through all pages</li>
+      </ul>
+      <span class="tag purple">etl/ncaa_api.py</span>
+    </div>
+    <div class="card transform">
+      <h3>Data Transformers</h3>
+      <p>Four transformer modules that clean raw API JSON into typed, analysis-ready pandas DataFrames. Handles dynamic column names from NCAA HTML tables.</p>
+      <ul class="detail-list">
+        <li><strong>rankings.py</strong> — parses "School (votes)", computes movement</li>
+        <li><strong>teams.py</strong> — normalizes dynamic headers, splits W/L/PCT</li>
+        <li><strong>scores.py</strong> — flattens nested game objects, classifies state</li>
+        <li><strong>schedules.py</strong> — builds unified schedule from score range</li>
+      </ul>
+      <span class="tag purple">etl/transformers/</span>
+    </div>
+  </div>
+
+  <!-- Orchestrators -->
+  <div class="card-grid two-col">
+    <div class="card quarto">
+      <h3>Daily ETL Orchestrator</h3>
+      <p>Runs the full pipeline in sequence — fetches 6 datasets from the NCAA API, transforms each one, and writes 6 pins to the board.</p>
+      <ul class="detail-list">
+        <li>Rankings (current poll)</li>
+        <li>Team Stats (stat_id=170, all pages)</li>
+        <li>Individual Stats (stat_id=171, all pages)</li>
+        <li>Standings (current season)</li>
+        <li>Schools Index (full NCAA directory)</li>
+        <li>Schedule (past 7 days + next 30 days of scores)</li>
+      </ul>
+      <span class="tag orange">etl/run_daily.py</span>
+      <span class="tag orange">daily_etl.qmd</span>
+    </div>
+    <div class="card quarto">
+      <h3>Live Scores Fetcher</h3>
+      <p>Lightweight single-endpoint job — fetches today's scoreboard and overwrites the live_scores pin. Designed for high-frequency execution.</p>
+      <ul class="detail-list">
+        <li>Fetches scoreboard for <code>date.today()</code></li>
+        <li>Transforms to 24-column DataFrame</li>
+        <li>Writes <code>ncaa_wrestling/live_scores</code> pin</li>
+        <li>Logs live vs. final vs. upcoming counts</li>
+      </ul>
+      <span class="tag orange">etl/run_live.py</span>
+      <span class="tag orange">live_scores_etl.qmd</span>
+    </div>
+  </div>
+</div>
+
+<!-- CONNECTOR -->
+<div class="flow-connector">
+  <div class="arrow">
+    <div class="arrow-line"></div>
+    <div class="arrow-head"></div>
+    <div class="arrow-label">pins.board.pin_write(df, type="parquet")</div>
+  </div>
+</div>
+
+<!-- ==================== 3. CONNECT PINS BOARD ==================== -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-number">3</div>
+    <div>
+      <div class="section-title">Posit Connect Pins Board</div>
+      <div class="section-desc">Shared data layer — the glue between ETL and the app</div>
+    </div>
+  </div>
+  <div class="wide-card">
+    <h3>pins.board_connect()</h3>
+    <p>Versioned, managed data objects on Posit Connect. ETL jobs write here, the Shiny app reads from here. No shared filesystem needed.</p>
+    <div class="pin-grid">
+      <span class="pin-chip">ncaa_wrestling/rankings</span>
+      <span class="pin-chip">ncaa_wrestling/team_stats</span>
+      <span class="pin-chip">ncaa_wrestling/individual_stats</span>
+      <span class="pin-chip">ncaa_wrestling/standings</span>
+      <span class="pin-chip">ncaa_wrestling/schools</span>
+      <span class="pin-chip">ncaa_wrestling/schedule</span>
+      <span class="pin-chip">ncaa_wrestling/live_scores</span>
+    </div>
+  </div>
+
+  <!-- How pins flow -->
+  <div class="h-flow">
+    <div class="h-flow-item">
+      <h4>ETL Writes</h4>
+      <p>Quarto jobs push<br>DataFrames as Parquet</p>
+    </div>
+    <div class="h-flow-arrow">&#10132;</div>
+    <div class="h-flow-item" style="border-color:rgba(197,160,48,0.3);">
+      <h4>Connect Board</h4>
+      <p>Versioned storage<br>with metadata</p>
+    </div>
+    <div class="h-flow-arrow">&#10132;</div>
+    <div class="h-flow-item">
+      <h4>App Reads</h4>
+      <p>Shiny loads fresh<br>data on each request</p>
+    </div>
+  </div>
+</div>
+
+<!-- CONNECTOR -->
+<div class="flow-connector">
+  <div class="arrow">
+    <div class="arrow-line"></div>
+    <div class="arrow-head"></div>
+    <div class="arrow-label">pins.board.pin_read() &rarr; pandas DataFrame</div>
+  </div>
+</div>
+
+<!-- ==================== 4. SHINY APP ==================== -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-number">4</div>
+    <div>
+      <div class="section-title">Shiny for Python Application</div>
+      <div class="section-desc">6-page interactive web app with modular architecture</div>
+    </div>
+  </div>
+  <div class="card-grid three-col">
+    <div class="card app">
+      <h3>Dashboard</h3>
+      <p>Overview hub showing key stats at a glance.</p>
+      <ul class="detail-list">
+        <li>4 value boxes: #1 team, ranked count, live now, upcoming</li>
+        <li>Top 10 rankings with rank badges &amp; trend arrows</li>
+        <li>Recent results table</li>
+        <li>Conference standings preview</li>
+      </ul>
+      <span class="tag green">Reads: 4 pins</span>
+    </div>
+    <div class="card app">
+      <h3>Rankings</h3>
+      <p>Full team rankings with interactive filtering.</p>
+      <ul class="detail-list">
+        <li>Top-N slider (5–100)</li>
+        <li>Team search filter</li>
+        <li>Gold/blue rank badges (top 5, 10, 25)</li>
+        <li>Movement indicators (&#9650; &#9660; &#8212;)</li>
+      </ul>
+      <span class="tag green">Reads: rankings</span>
+    </div>
+    <div class="card app">
+      <h3>Schedule</h3>
+      <p>Upcoming matches and recent results in one view.</p>
+      <ul class="detail-list">
+        <li>View modes: All / Upcoming / Results</li>
+        <li>Team search across home &amp; away</li>
+        <li>Network filter (ESPN, BTN, Flo)</li>
+        <li>Formatted matchup with ranks and scores</li>
+      </ul>
+      <span class="tag green">Reads: schedule</span>
+    </div>
+    <div class="card app">
+      <h3>Teams</h3>
+      <p>Conference standings and team-level statistics.</p>
+      <ul class="detail-list">
+        <li>Toggle: Standings vs. Stats view</li>
+        <li>Dynamic conference dropdown</li>
+        <li>Team search filter</li>
+        <li>Conf W/L, Overall W/L, Streak</li>
+      </ul>
+      <span class="tag green">Reads: standings, team_stats</span>
+    </div>
+    <div class="card app">
+      <h3>Live Scores</h3>
+      <p>Real-time scoreboard with manual refresh.</p>
+      <ul class="detail-list">
+        <li>Score cards with live pulse animation</li>
+        <li>Status filter: Live / Final / Upcoming</li>
+        <li>3 count boxes (live, final, upcoming)</li>
+        <li>Refresh button re-reads live_scores pin</li>
+      </ul>
+      <span class="tag green">Reads: live_scores</span>
+    </div>
+    <div class="card app">
+      <h3>Brackets</h3>
+      <p>NCAA tournament bracket visualization.</p>
+      <ul class="detail-list">
+        <li>Weight class selector (125–285)</li>
+        <li>Round filter (R32 → Finals, Consolations)</li>
+        <li>Bracket match components with seeds</li>
+        <li>Placeholder during off-season</li>
+      </ul>
+      <span class="tag green">Reads: brackets</span>
+    </div>
+  </div>
+</div>
+
+<!-- CONNECTOR -->
+<div class="flow-connector">
+  <div class="arrow">
+    <div class="arrow-line" style="height:20px;"></div>
+    <div class="arrow-head"></div>
+  </div>
+</div>
+
+<!-- ==================== 5. POSIT CONNECT PLATFORM ==================== -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-number">5</div>
+    <div>
+      <div class="section-title">Posit Connect — The Platform Layer</div>
+      <div class="section-desc">Hosts, schedules, and connects all the pieces</div>
+    </div>
+  </div>
+
+  <div class="wide-card" style="border-color: rgba(14,165,233,0.3); text-align:left;">
+    <h3 style="text-align:center;">How Connect Orchestrates Everything</h3>
+    <p style="text-align:center; margin-bottom:1.5rem;">Three independently deployed content items that communicate through a shared pins board — no glue code, no cron jobs on a VM, no S3 buckets to manage.</p>
+
+    <div class="deploy-grid">
+      <div class="deploy-card">
+        <div class="deploy-num">1</div>
+        <h4>Daily ETL</h4>
+        <p>Quarto document rendered on schedule. Connect runs it, captures the output as an HTML report, and logs success/failure.</p>
+        <div class="cmd">rsconnect deploy quarto<br>--entrypoint etl/notebooks/daily_etl.qmd</div>
+        <p style="margin-top:0.5rem;"><strong style="color:#fbbf24;">Schedule:</strong> Daily at 6:00 AM ET</p>
+      </div>
+      <div class="deploy-card">
+        <div class="deploy-num">2</div>
+        <h4>Live Scores ETL</h4>
+        <p>Lightweight Quarto doc for high-frequency refresh. Same deploy pattern, different schedule.</p>
+        <div class="cmd">rsconnect deploy quarto<br>--entrypoint etl/notebooks/live_scores_etl.qmd</div>
+        <p style="margin-top:0.5rem;"><strong style="color:#fbbf24;">Schedule:</strong> Every 1–5 min on event days</p>
+      </div>
+      <div class="deploy-card">
+        <div class="deploy-num">3</div>
+        <h4>Shiny App</h4>
+        <p>Always-on interactive application. Connect handles scaling, auth, load balancing, and TLS termination.</p>
+        <div class="cmd">rsconnect deploy shiny<br>--entrypoint app/app.py</div>
+        <p style="margin-top:0.5rem;"><strong style="color:#fbbf24;">Mode:</strong> Always-on application</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Connect Value Props -->
+  <div class="value-prop-grid">
+    <div class="value-prop">
+      <div class="vp-icon">&#128197;</div>
+      <h4>Managed Scheduling</h4>
+      <p>No cron, no Airflow, no Lambda. Connect's built-in scheduler runs Quarto ETL jobs on whatever cadence you set — daily, hourly, or every minute.</p>
+    </div>
+    <div class="value-prop">
+      <div class="vp-icon">&#128279;</div>
+      <h4>Pins as Data Contracts</h4>
+      <p>The pins board is a versioned, shared namespace. ETL writes DataFrames, the app reads them. No database, no file sync, no API to build. Producers and consumers are completely decoupled.</p>
+    </div>
+    <div class="value-prop">
+      <div class="vp-icon">&#128274;</div>
+      <h4>Zero-Config Auth</h4>
+      <p>CONNECT_SERVER and CONNECT_API_KEY are auto-injected. Pins auth is handled by Connect's internal token exchange — no secrets in code, no .env files on servers.</p>
+    </div>
+    <div class="value-prop">
+      <div class="vp-icon">&#128640;</div>
+      <h4>One-Command Deploys</h4>
+      <p>Each content item deploys with a single rsconnect CLI command. Connect builds the Python environment from requirements.txt, installs deps, and starts serving.</p>
+    </div>
+    <div class="value-prop">
+      <div class="vp-icon">&#128202;</div>
+      <h4>ETL Observability</h4>
+      <p>Every Quarto render produces an HTML report saved on Connect. If the daily ETL fails, you can see exactly which step broke — it's a rendered notebook, not a log file.</p>
+    </div>
+    <div class="value-prop">
+      <div class="vp-icon">&#127760;</div>
+      <h4>Environment Parity</h4>
+      <p>Local dev uses pins.board_folder() for the same read/write API. Flip to board_connect() with one env var. No code changes between laptop and production.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 6. ENV VARS ==================== -->
+<div class="flow-connector">
+  <div class="arrow">
+    <div class="arrow-line" style="height:20px;"></div>
+    <div class="arrow-head"></div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-header">
+    <div class="section-number">6</div>
+    <div>
+      <div class="section-title">Environment Detection</div>
+      <div class="section-desc">How the code knows where it's running</div>
+    </div>
+  </div>
+  <div class="card-grid single">
+    <div class="card connect" style="text-align:center;">
+      <h3>Dual-Mode Board Selection</h3>
+      <p style="max-width:700px; margin:0.5rem auto;">
+        Both the ETL writer and app reader check for the <code style="color:#38bdf8;">CONNECT_SERVER</code> environment variable.
+        If present (auto-injected by Posit Connect), they use <code style="color:#38bdf8;">pins.board_connect()</code>.
+        If absent (local laptop), they use <code style="color:#38bdf8;">pins.board_folder("pin_cache/")</code>.
+        Same code, same API, zero conditional logic in the business layer.
+      </p>
+      <div style="display:flex; justify-content:center; gap:2rem; margin-top:1rem; flex-wrap:wrap;">
+        <div>
+          <div style="font-size:0.7rem; text-transform:uppercase; letter-spacing:1px; color:rgba(255,255,255,0.35); margin-bottom:0.3rem;">On Connect</div>
+          <span class="pin-chip" style="font-size:0.8rem;">CONNECT_SERVER=https://connect.example.com</span>
+        </div>
+        <div>
+          <div style="font-size:0.7rem; text-transform:uppercase; letter-spacing:1px; color:rgba(255,255,255,0.35); margin-bottom:0.3rem;">Locally</div>
+          <span class="pin-chip" style="font-size:0.8rem; opacity:0.6;">(not set) &rarr; pin_cache/</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<div class="footer">
+  NCAA D1 Wrestling Tracker &middot; Built with Shiny for Python, Posit Connect, Posit Pins, and Quarto
+</div>
+
+</body>
+</html>
