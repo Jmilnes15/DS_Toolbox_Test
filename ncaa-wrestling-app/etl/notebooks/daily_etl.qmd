@@ -1,0 +1,57 @@
+---
+title: "NCAA Wrestling — Daily ETL"
+format: html
+execute:
+  echo: true
+  warning: false
+---
+
+# Daily ETL Pipeline
+
+Scheduled to run daily at 6:00 AM ET on Posit Connect. Fetches rankings,
+standings, team/individual stats, schools, and schedule data from the NCAA API
+and writes them as pins to the Connect board.
+
+**Environment variables required on Connect:**
+
+- `CONNECT_SERVER` — auto-injected by Connect
+- `CONNECT_API_KEY` — set in content settings → Environment
+
+```{python}
+#| label: setup
+import sys
+from pathlib import Path
+
+# On Connect the working directory is the content bundle root.
+# When rendered from etl/notebooks/, we need the project root on sys.path.
+project_root = str(Path(".").resolve())
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
+# Also handle being two levels deep in etl/notebooks/
+alt_root = str(Path(".").resolve().parent.parent)
+if alt_root not in sys.path:
+    sys.path.insert(0, alt_root)
+```
+
+```{python}
+#| label: run-etl
+from etl.run_daily import run_daily_etl
+
+results = run_daily_etl()
+```
+
+## Results Summary
+
+```{python}
+#| label: summary
+import pandas as pd
+
+summary = pd.DataFrame([
+    {"Dataset": name, "Rows": count}
+    for name, count in results.items()
+])
+summary
+```
+
+Pipeline completed successfully.

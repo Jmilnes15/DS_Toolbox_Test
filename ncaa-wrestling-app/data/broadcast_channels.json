@@ -1,0 +1,50 @@
+[
+  {
+    "channel": "ESPN",
+    "type": "cable",
+    "url": "https://www.espn.com/watch/",
+    "notes": "NCAA Championships, select duals and conference championships"
+  },
+  {
+    "channel": "ESPN2",
+    "type": "cable",
+    "url": "https://www.espn.com/watch/",
+    "notes": "Overflow and supplemental coverage"
+  },
+  {
+    "channel": "ESPNU",
+    "type": "cable",
+    "url": "https://www.espn.com/watch/",
+    "notes": "National Duals Invitational finals, select events"
+  },
+  {
+    "channel": "ESPN+",
+    "type": "streaming",
+    "url": "https://plus.espn.com/",
+    "notes": "150+ events per season, no cable required (~$11/month)"
+  },
+  {
+    "channel": "Big Ten Network",
+    "type": "cable",
+    "url": "https://www.bigtennetwork.com/",
+    "notes": "24 Big Ten duals, Big Ten Championships"
+  },
+  {
+    "channel": "B1G+",
+    "type": "streaming",
+    "url": "https://www.bigtenplus.com/",
+    "notes": "80+ Big Ten matchups ($12.99/mo or $89.99/yr)"
+  },
+  {
+    "channel": "FloWrestling",
+    "type": "streaming",
+    "url": "https://www.flowrestling.org/",
+    "notes": "Extensive event coverage, archives, brackets (~$150/yr via FloSports)"
+  },
+  {
+    "channel": "ACC Network",
+    "type": "cable",
+    "url": "https://www.espn.com/watch/",
+    "notes": "ACC conference wrestling coverage"
+  }
+]

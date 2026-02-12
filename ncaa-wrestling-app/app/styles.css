@@ -1,0 +1,748 @@
+/* NCAA Wrestling Tracker — Custom Theme
+   Dark blue/gold wrestling-inspired palette
+   Optimized for desktop + mobile viewing */
+
+:root {
+  --primary: #1a2744;
+  --primary-light: #2a3f6a;
+  --secondary: #c5a030;
+  --secondary-light: #e0c45a;
+  --accent: #e74c3c;
+  --bg: #f5f6fa;
+  --bg-card: #ffffff;
+  --text: #2c3e50;
+  --text-muted: #7f8c8d;
+  --border: #e1e4e8;
+  --success: #27ae60;
+  --warning: #f39c12;
+  --danger: #e74c3c;
+  --live-pulse: #e74c3c;
+}
+
+/* ===========================================================
+   GLOBAL LAYOUT
+   =========================================================== */
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Prevent horizontal overflow on mobile */
+.container-fluid {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  overflow-x: hidden;
+}
+
+/* ===========================================================
+   NAVBAR
+   =========================================================== */
+
+.bslib-page-navbar .navbar {
+  background-color: var(--primary) !important;
+  border-bottom: 3px solid var(--secondary);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  padding: 0.4rem 1rem;
+}
+
+.bslib-page-navbar .navbar-brand {
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: 0.3px;
+  color: #fff !important;
+  white-space: nowrap;
+}
+
+.bslib-page-navbar .nav-link {
+  color: rgba(255,255,255,0.85) !important;
+  font-weight: 500;
+  font-size: 0.88rem;
+  padding: 0.5rem 0.75rem !important;
+  transition: color 0.2s;
+  white-space: nowrap;
+}
+
+.bslib-page-navbar .nav-link:hover,
+.bslib-page-navbar .nav-link.active {
+  color: var(--secondary-light) !important;
+}
+
+/* Mobile hamburger menu */
+.navbar-toggler {
+  border-color: rgba(255,255,255,0.3) !important;
+}
+
+.navbar-toggler-icon {
+  filter: invert(1);
+}
+
+/* ===========================================================
+   CARDS
+   =========================================================== */
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  transition: box-shadow 0.2s;
+  overflow: hidden;
+}
+
+.card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.card-header {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: #fff;
+  font-weight: 600;
+  border-radius: 10px 10px 0 0 !important;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+}
+
+.card-body {
+  padding: 1rem;
+}
+
+/* ===========================================================
+   VALUE BOXES
+   =========================================================== */
+
+.value-box {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.value-box .value-box-title {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 0.9;
+}
+
+.value-box .value-box-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+/* ===========================================================
+   DATA TABLES — responsive horizontal scroll
+   =========================================================== */
+
+.gt_table {
+  font-size: 0.9rem;
+}
+
+.table-responsive-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.dataframe {
+  width: 100%;
+  min-width: 480px; /* ensures scroll on narrow screens */
+}
+
+.dataframe thead th {
+  background-color: var(--primary);
+  color: #fff;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+  padding: 0.55rem 0.65rem;
+  border: none;
+  white-space: nowrap;
+}
+
+.dataframe tbody td {
+  padding: 0.45rem 0.65rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+  font-size: 0.85rem;
+}
+
+.dataframe tbody tr:hover {
+  background-color: #f0f4ff;
+}
+
+/* ===========================================================
+   RANK BADGES
+   =========================================================== */
+
+.rank-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: #fff;
+}
+
+.rank-badge.top-5 {
+  background-color: var(--secondary);
+  color: var(--primary);
+}
+
+.rank-badge.top-10 {
+  background-color: var(--primary);
+}
+
+.rank-badge.top-25 {
+  background-color: var(--primary-light);
+}
+
+/* ===========================================================
+   MOVEMENT INDICATORS
+   =========================================================== */
+
+.movement-up { color: var(--success); font-weight: 600; }
+.movement-down { color: var(--danger); font-weight: 600; }
+.movement-same { color: var(--text-muted); }
+
+/* ===========================================================
+   LIVE INDICATOR
+   =========================================================== */
+
+.live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--live-pulse);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #fff;
+  animation: pulse 1.5s infinite;
+}
+
+/* ===========================================================
+   SCORE CARDS
+   =========================================================== */
+
+.score-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  margin-bottom: 0;
+  transition: border-color 0.2s;
+}
+
+.score-card.live { border-left: 4px solid var(--live-pulse); }
+.score-card.final { border-left: 4px solid var(--primary); }
+.score-card.upcoming { border-left: 4px solid var(--text-muted); }
+
+.score-card .team-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.25rem 0;
+}
+
+.score-card .team-name { font-weight: 600; font-size: 0.92rem; }
+.score-card .team-name.winner { font-weight: 700; }
+.score-card .team-rank { font-size: 0.78rem; color: var(--text-muted); margin-right: 0.4rem; }
+.score-card .team-score { font-size: 1.15rem; font-weight: 700; min-width: 2rem; text-align: right; }
+.score-card .team-score.winner { color: var(--primary); }
+.score-card .game-info {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 0.3rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* ===========================================================
+   BRACKET VISUALIZATION
+   =========================================================== */
+
+.bracket-container { overflow-x: auto; padding: 1rem 0; -webkit-overflow-scrolling: touch; }
+.bracket-round { display: flex; flex-direction: column; justify-content: space-around; min-width: 200px; padding: 0 0.5rem; }
+.bracket-match { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; margin: 0.5rem 0; overflow: hidden; }
+.bracket-match .wrestler { display: flex; justify-content: space-between; padding: 0.4rem 0.6rem; font-size: 0.82rem; border-bottom: 1px solid var(--border); }
+.bracket-match .wrestler:last-child { border-bottom: none; }
+.bracket-match .wrestler.winner { background-color: #f0f9f4; font-weight: 600; }
+.bracket-match .seed { color: var(--text-muted); font-size: 0.72rem; margin-right: 0.3rem; }
+
+/* ===========================================================
+   FILTERS
+   =========================================================== */
+
+.filter-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.filter-section label {
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: var(--text-muted);
+}
+
+/* ===========================================================
+   FOOTER
+   =========================================================== */
+
+.app-footer {
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+  margin-top: 2rem;
+}
+
+/* ===========================================================
+   HOW IT WORKS PAGE
+   =========================================================== */
+
+.hiw-hero {
+  background: linear-gradient(135deg, #0f1a2e 0%, #1a2744 50%, #2a3f6a 100%);
+  border-radius: 12px;
+  padding: 2rem 1.5rem 1.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  border-bottom: 3px solid var(--secondary);
+}
+
+.hiw-hero-sub {
+  color: rgba(255,255,255,0.6);
+  font-size: 0.92rem;
+  margin-top: 0.3rem;
+}
+
+.hiw-badge-row {
+  display: flex;
+  justify-content: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.hiw-tech-badge {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 16px;
+  padding: 0.22rem 0.65rem;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.7);
+  white-space: nowrap;
+}
+
+/* Section headers */
+.hiw-section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+}
+
+.hiw-section-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #c5a030, #e0c45a);
+  color: #1a2744;
+  font-weight: 800;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.hiw-section-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--primary);
+  display: block;
+}
+
+.hiw-section-subtitle {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  display: block;
+}
+
+/* Cards */
+.hiw-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.1rem 1.2rem;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+  border-top: 3px solid transparent;
+}
+
+.hiw-card-blue { border-top-color: #3b82f6; }
+.hiw-card-purple { border-top-color: #8b5cf6; }
+.hiw-card-amber { border-top-color: #f59e0b; }
+.hiw-card-green { border-top-color: #10b981; }
+.hiw-card-deploy { border-top-color: #0ea5e9; }
+.hiw-card-env { border-top-color: #c5a030; }
+
+.hiw-card-desc {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+  margin-bottom: 0.4rem;
+}
+
+.hiw-detail-item {
+  font-size: 0.78rem;
+  color: #555;
+  padding: 0.15rem 0 0.15rem 0.9rem;
+  position: relative;
+}
+.hiw-detail-item::before {
+  content: '\203A';
+  position: absolute;
+  left: 0;
+  color: var(--secondary);
+  font-weight: 700;
+}
+
+.hiw-row { margin-bottom: 0.75rem; }
+
+/* Flow arrows */
+.hiw-flow-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem 0;
+}
+
+.hiw-arrow-line {
+  width: 3px;
+  height: 28px;
+  background: linear-gradient(to bottom, var(--secondary), var(--secondary-light));
+  border-radius: 2px;
+}
+
+.hiw-arrow-head {
+  width: 0; height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 9px solid var(--secondary-light);
+}
+
+.hiw-arrow-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--secondary);
+  margin-top: 0.3rem;
+  text-align: center;
+}
+
+/* Pins board */
+.hiw-pins-board {
+  background: linear-gradient(135deg, #1a2744 0%, #1e3050 100%);
+  border: 2px solid rgba(197,160,48,0.25);
+  border-radius: 12px;
+  padding: 1.5rem;
+  color: #fff;
+}
+
+.hiw-pin-row {
+  display: flex;
+  justify-content: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.hiw-pin-chip {
+  background: rgba(197,160,48,0.1);
+  border: 1px solid rgba(197,160,48,0.25);
+  border-radius: 8px;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #e0c45a;
+  font-family: 'Courier New', monospace;
+  white-space: nowrap;
+}
+
+/* Horizontal flow */
+.hiw-hflow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin: 1.25rem 0;
+  flex-wrap: wrap;
+}
+
+.hiw-hflow-item {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.7rem 1rem;
+  text-align: center;
+  min-width: 130px;
+}
+
+.hiw-hflow-item-accent {
+  border-color: rgba(197,160,48,0.4);
+  background: #fffdf5;
+}
+
+.hiw-hflow-title { font-size: 0.82rem; font-weight: 700; color: var(--primary); }
+.hiw-hflow-desc { font-size: 0.7rem; color: var(--text-muted); }
+
+.hiw-hflow-arrow {
+  font-size: 1.3rem;
+  color: var(--secondary);
+  padding: 0 0.5rem;
+  font-weight: 700;
+}
+
+/* Deploy cards */
+.hiw-deploy-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--secondary);
+  color: var(--primary);
+  font-weight: 800;
+  font-size: 0.72rem;
+  margin-bottom: 0.4rem;
+}
+
+.hiw-cmd {
+  font-family: 'Courier New', monospace;
+  font-size: 0.7rem;
+  color: #10b981;
+  background: #f0fdf4;
+  padding: 0.3rem 0.5rem;
+  border-radius: 5px;
+  margin-top: 0.2rem;
+  word-break: break-all;
+  line-height: 1.4;
+}
+
+/* Value props */
+.hiw-vp-header { margin-top: 1.5rem; }
+
+.hiw-vp-card {
+  background: #f8fbff;
+  border: 1px solid #d6e4f0;
+  border-radius: 10px;
+  padding: 1rem;
+  text-align: center;
+  margin-bottom: 0.75rem;
+  min-height: 140px;
+}
+
+.hiw-vp-icon { font-size: 1.5rem; margin-bottom: 0.3rem; }
+.hiw-vp-title { font-size: 0.85rem; font-weight: 700; color: #0ea5e9; margin-bottom: 0.25rem; }
+.hiw-vp-desc { font-size: 0.75rem; color: var(--text-muted); line-height: 1.45; }
+
+/* Env detection */
+.hiw-env-row {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.hiw-env-block { text-align: center; }
+
+.hiw-env-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 0.3rem;
+}
+
+.hiw-connect-intro { margin-bottom: 0.5rem; }
+
+/* ===========================================================
+   RESPONSIVE — TABLET (< 992px)
+   =========================================================== */
+
+@media (max-width: 991px) {
+  .bslib-page-navbar .navbar-brand {
+    font-size: 1rem;
+  }
+
+  .bslib-page-navbar .nav-link {
+    font-size: 0.82rem;
+    padding: 0.4rem 0.5rem !important;
+  }
+
+  .value-box .value-box-value {
+    font-size: 1.5rem;
+  }
+
+  /* Stack sidebar filters on top on tablet */
+  .col-sm-3 {
+    flex: 0 0 100%;
+    max-width: 100%;
+    margin-bottom: 1rem;
+  }
+  .col-sm-9 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+/* ===========================================================
+   RESPONSIVE — MOBILE (< 768px)
+   =========================================================== */
+
+@media (max-width: 767px) {
+  .container-fluid {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  /* Value boxes: 2-column grid instead of 4 */
+  .row > .col-sm-3 {
+    flex: 0 0 50%;
+    max-width: 50%;
+    margin-bottom: 0.5rem;
+  }
+
+  .value-box .value-box-value {
+    font-size: 1.3rem;
+  }
+
+  .value-box .value-box-title {
+    font-size: 0.7rem;
+  }
+
+  /* Score cards: single column */
+  .score-card {
+    padding: 0.7rem;
+  }
+
+  .score-card .team-name { font-size: 0.85rem; }
+  .score-card .team-score { font-size: 1rem; }
+
+  /* Cards stack naturally */
+  .row > .col-sm-6 {
+    margin-bottom: 0.75rem;
+  }
+
+  /* Smaller page titles */
+  h2 { font-size: 1.4rem; }
+  h3 { font-size: 1.15rem; }
+
+  /* Tables scroll horizontally */
+  .dataframe {
+    min-width: 550px;
+  }
+
+  .dataframe thead th {
+    font-size: 0.68rem;
+    padding: 0.4rem 0.5rem;
+  }
+
+  .dataframe tbody td {
+    font-size: 0.78rem;
+    padding: 0.35rem 0.5rem;
+  }
+
+  /* Rank badges smaller */
+  .rank-badge {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 0.7rem;
+  }
+
+  /* Filter section compact */
+  .filter-section {
+    padding: 0.75rem;
+  }
+
+  /* How It Works responsive */
+  .hiw-hero {
+    padding: 1.5rem 1rem 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .hiw-hero h2 { font-size: 1.4rem; }
+
+  .hiw-section-title { font-size: 1rem; }
+  .hiw-section-subtitle { font-size: 0.75rem; }
+
+  .hiw-card { padding: 0.9rem 1rem; }
+
+  .hiw-hflow { flex-direction: column; gap: 0.3rem; }
+  .hiw-hflow-arrow { transform: rotate(90deg); padding: 0.2rem 0; }
+
+  .hiw-pin-row { gap: 0.35rem; }
+  .hiw-pin-chip { font-size: 0.62rem; padding: 0.25rem 0.45rem; }
+
+  .hiw-env-row { flex-direction: column; gap: 0.75rem; }
+
+  .hiw-vp-card { min-height: auto; }
+}
+
+/* ===========================================================
+   RESPONSIVE — SMALL MOBILE (< 480px)
+   =========================================================== */
+
+@media (max-width: 479px) {
+  .bslib-page-navbar .navbar-brand {
+    font-size: 0.88rem;
+  }
+
+  /* Value boxes: full width stack */
+  .row > .col-sm-3 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .value-box .value-box-value {
+    font-size: 1.15rem;
+  }
+
+  h2 { font-size: 1.2rem; }
+  h3 { font-size: 1rem; }
+
+  .hiw-hero h2 { font-size: 1.15rem; }
+  .hiw-tech-badge { font-size: 0.62rem; }
+  .hiw-section-num { width: 26px; height: 26px; font-size: 0.75rem; }
+}

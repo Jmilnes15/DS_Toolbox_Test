@@ -1,0 +1,25 @@
+# NCAA Wrestling Tracker - Python Dependencies
+# =============================================
+
+# Core App Framework
+shiny>=1.0.0
+htmltools>=0.5.0
+
+# Data Processing
+pandas>=2.0.0
+pyarrow>=14.0.0
+
+# Data Storage — Posit Pins (shared board between ETL and Shiny app)
+pins>=0.8.0
+
+# Visualization
+great-tables>=0.2.0
+
+# API Clients
+httpx>=0.27.0
+
+# Deployment
+rsconnect-python>=1.22.0
+
+# Utilities
+python-dateutil>=2.8.0

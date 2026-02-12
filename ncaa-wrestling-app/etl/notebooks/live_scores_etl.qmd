@@ -1,0 +1,41 @@
+---
+title: "NCAA Wrestling — Live Scores ETL"
+format: html
+execute:
+  echo: true
+  warning: false
+---
+
+# Live Scores Fetcher
+
+Scheduled to run every 1–5 minutes during event windows on Posit Connect.
+Fetches today's scoreboard from the NCAA API and updates the `live_scores` pin.
+
+**Environment variables required on Connect:**
+
+- `CONNECT_SERVER` — auto-injected by Connect
+- `CONNECT_API_KEY` — set in content settings → Environment
+
+```{python}
+#| label: setup
+import sys
+from pathlib import Path
+
+project_root = str(Path(".").resolve())
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
+alt_root = str(Path(".").resolve().parent.parent)
+if alt_root not in sys.path:
+    sys.path.insert(0, alt_root)
+```
+
+```{python}
+#| label: fetch-scores
+from etl.run_live import fetch_live_scores
+
+game_count = fetch_live_scores()
+print(f"Games found today: {game_count}")
+```
+
+Refresh complete.
