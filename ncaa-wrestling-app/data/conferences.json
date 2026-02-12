@@ -1,0 +1,70 @@
+[
+  {
+    "name": "Big Ten",
+    "abbreviation": "B1G",
+    "schools": [
+      "Penn State", "Iowa", "Michigan", "Ohio State", "Nebraska",
+      "Minnesota", "Wisconsin", "Northwestern", "Purdue", "Illinois",
+      "Maryland", "Michigan State", "Rutgers", "Indiana", "Oregon"
+    ]
+  },
+  {
+    "name": "Big 12",
+    "abbreviation": "B12",
+    "schools": [
+      "Iowa State", "Oklahoma State", "Missouri", "Northern Iowa",
+      "Oklahoma", "West Virginia", "Air Force", "North Dakota State",
+      "Northern Colorado", "South Dakota State", "Utah Valley",
+      "Wyoming", "Cal Poly", "Arizona State"
+    ]
+  },
+  {
+    "name": "ACC",
+    "abbreviation": "ACC",
+    "schools": [
+      "NC State", "Virginia Tech", "North Carolina", "Pittsburgh",
+      "Duke", "Virginia"
+    ]
+  },
+  {
+    "name": "EIWA",
+    "abbreviation": "EIWA",
+    "schools": [
+      "Cornell", "Lehigh", "Princeton", "Columbia", "Penn",
+      "Army", "Navy", "Bucknell", "Brown", "American",
+      "Binghamton", "Drexel", "Franklin & Marshall", "Hofstra",
+      "Sacred Heart", "George Mason", "Harvard"
+    ]
+  },
+  {
+    "name": "MAC",
+    "abbreviation": "MAC",
+    "schools": [
+      "Central Michigan", "Clarion", "Cleveland State", "Lock Haven",
+      "Bloomsburg", "Edinboro", "Kent State", "Rider",
+      "Buffalo", "Ohio"
+    ]
+  },
+  {
+    "name": "SoCon",
+    "abbreviation": "SOCON",
+    "schools": [
+      "Appalachian State", "Campbell", "Chattanooga", "The Citadel",
+      "Gardner-Webb", "Presbyterian", "VMI"
+    ]
+  },
+  {
+    "name": "PAC-12",
+    "abbreviation": "P12",
+    "schools": [
+      "Stanford", "Cal Baptist", "Little Rock"
+    ]
+  },
+  {
+    "name": "EWL",
+    "abbreviation": "EWL",
+    "schools": [
+      "Fresno State", "CSU Bakersfield", "Cal State Fullerton"
+    ]
+  }
+]
