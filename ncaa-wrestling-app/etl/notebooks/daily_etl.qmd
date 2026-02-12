@@ -1,0 +1,40 @@
+---
+title: "NCAA Wrestling — Daily ETL"
+format: html
+execute:
+  echo: true
+  warning: false
+---
+
+# Daily ETL Pipeline
+
+Scheduled to run daily at 6:00 AM ET on Posit Connect. Fetches rankings,
+standings, team/individual stats, schools, and schedule data.
+
+```{python}
+import sys
+from pathlib import Path
+
+# Project root
+sys.path.insert(0, str(Path(".").resolve().parent.parent))
+```
+
+```{python}
+from etl.run_daily import run_daily_etl
+
+results = run_daily_etl()
+```
+
+## Results Summary
+
+```{python}
+import pandas as pd
+
+summary = pd.DataFrame([
+    {"Dataset": name, "Rows": count}
+    for name, count in results.items()
+])
+summary
+```
+
+Pipeline completed successfully.

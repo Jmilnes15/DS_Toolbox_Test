@@ -1,0 +1,363 @@
+/* NCAA Wrestling Tracker — Custom Theme
+   Dark blue/gold wrestling-inspired palette */
+
+:root {
+  --primary: #1a2744;
+  --primary-light: #2a3f6a;
+  --secondary: #c5a030;
+  --secondary-light: #e0c45a;
+  --accent: #e74c3c;
+  --bg: #f5f6fa;
+  --bg-card: #ffffff;
+  --text: #2c3e50;
+  --text-muted: #7f8c8d;
+  --border: #e1e4e8;
+  --success: #27ae60;
+  --warning: #f39c12;
+  --danger: #e74c3c;
+  --live-pulse: #e74c3c;
+}
+
+/* ---- Layout ---- */
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.bslib-page-navbar .navbar {
+  background-color: var(--primary) !important;
+  border-bottom: 3px solid var(--secondary);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.bslib-page-navbar .navbar-brand {
+  font-weight: 700;
+  font-size: 1.3rem;
+  letter-spacing: 0.5px;
+  color: #fff !important;
+}
+
+.bslib-page-navbar .nav-link {
+  color: rgba(255,255,255,0.85) !important;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.bslib-page-navbar .nav-link:hover,
+.bslib-page-navbar .nav-link.active {
+  color: var(--secondary-light) !important;
+}
+
+/* ---- Cards ---- */
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  transition: box-shadow 0.2s;
+}
+
+.card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.card-header {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: #fff;
+  font-weight: 600;
+  border-radius: 10px 10px 0 0 !important;
+  padding: 0.75rem 1rem;
+}
+
+/* ---- Value Boxes ---- */
+
+.value-box {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.value-box .value-box-title {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 0.9;
+}
+
+.value-box .value-box-value {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+/* ---- Data Tables ---- */
+
+.gt_table {
+  font-size: 0.9rem;
+}
+
+.dataframe thead th {
+  background-color: var(--primary);
+  color: #fff;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+  padding: 0.6rem 0.75rem;
+  border: none;
+}
+
+.dataframe tbody td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+.dataframe tbody tr:hover {
+  background-color: #f0f4ff;
+}
+
+/* ---- Rank Badges ---- */
+
+.rank-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #fff;
+}
+
+.rank-badge.top-5 {
+  background-color: var(--secondary);
+  color: var(--primary);
+}
+
+.rank-badge.top-10 {
+  background-color: var(--primary);
+}
+
+.rank-badge.top-25 {
+  background-color: var(--primary-light);
+}
+
+/* ---- Movement Indicators ---- */
+
+.movement-up {
+  color: var(--success);
+  font-weight: 600;
+}
+
+.movement-down {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.movement-same {
+  color: var(--text-muted);
+}
+
+/* ---- Live Indicator ---- */
+
+.live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--live-pulse);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fff;
+  animation: pulse 1.5s infinite;
+}
+
+/* ---- Score Cards ---- */
+
+.score-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  transition: border-color 0.2s;
+}
+
+.score-card.live {
+  border-left: 4px solid var(--live-pulse);
+}
+
+.score-card.final {
+  border-left: 4px solid var(--primary);
+}
+
+.score-card.upcoming {
+  border-left: 4px solid var(--text-muted);
+}
+
+.score-card .team-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.3rem 0;
+}
+
+.score-card .team-name {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.score-card .team-name.winner {
+  font-weight: 700;
+}
+
+.score-card .team-rank {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-right: 0.5rem;
+}
+
+.score-card .team-score {
+  font-size: 1.2rem;
+  font-weight: 700;
+  min-width: 2rem;
+  text-align: right;
+}
+
+.score-card .team-score.winner {
+  color: var(--primary);
+}
+
+.score-card .game-info {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 0.3rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* ---- Schedule Table ---- */
+
+.schedule-row {
+  display: grid;
+  grid-template-columns: 100px 1fr 1fr auto auto;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.schedule-row:hover {
+  background-color: #f0f4ff;
+}
+
+/* ---- Bracket Visualization ---- */
+
+.bracket-container {
+  overflow-x: auto;
+  padding: 1rem 0;
+}
+
+.bracket-round {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  min-width: 220px;
+  padding: 0 0.5rem;
+}
+
+.bracket-match {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin: 0.5rem 0;
+  overflow: hidden;
+}
+
+.bracket-match .wrestler {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.85rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.bracket-match .wrestler:last-child {
+  border-bottom: none;
+}
+
+.bracket-match .wrestler.winner {
+  background-color: #f0f9f4;
+  font-weight: 600;
+}
+
+.bracket-match .seed {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  margin-right: 0.3rem;
+}
+
+.bracket-match .result {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+/* ---- Filters ---- */
+
+.filter-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.filter-section label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: var(--text-muted);
+}
+
+/* ---- Footer ---- */
+
+.app-footer {
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+  margin-top: 2rem;
+}
+
+/* ---- Responsive ---- */
+
+@media (max-width: 768px) {
+  .value-box .value-box-value {
+    font-size: 1.5rem;
+  }
+
+  .score-card {
+    padding: 0.75rem;
+  }
+}
