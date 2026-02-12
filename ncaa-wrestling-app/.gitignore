@@ -1,0 +1,22 @@
+# Local pin cache (not deployed — data lives on Connect board)
+pin_cache/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# Environment
+.env
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+
+# Quarto render output
+etl/notebooks/*_files/
+etl/notebooks/*.html

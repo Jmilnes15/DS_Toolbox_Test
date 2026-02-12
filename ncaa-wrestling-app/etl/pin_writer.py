@@ -1,59 +1,95 @@
-"""Write processed DataFrames to a local pin-compatible cache (Parquet files).
+"""Write processed DataFrames to a Posit Connect pins board.
 
-On Posit Connect this would use the `pins` library with a Connect board.
-For local development and environments without Connect, we use a simple
-Parquet-based file cache that mirrors the pins interface.
+On Posit Connect:
+    Uses ``pins.board_connect()`` which auto-detects the server URL and API key
+    from the ``CONNECT_SERVER`` and ``CONNECT_API_KEY`` environment variables
+    (injected automatically when content runs on Connect).
+
+For local development:
+    Falls back to ``pins.board_folder()`` using a local ``pin_cache/`` directory.
+    Set CONNECT_SERVER + CONNECT_API_KEY env vars to test against a real board.
 """
 
-import json
 import logging
 import os
-from datetime import datetime
 from pathlib import Path
 
 import pandas as pd
+import pins
 
 logger = logging.getLogger(__name__)
 
-_DEFAULT_CACHE_DIR = Path(__file__).resolve().parent.parent / "pin_cache"
+# Pin name prefix — keeps our pins namespaced on shared Connect boards
+PIN_PREFIX = "ncaa_wrestling"
+
+_LOCAL_CACHE_DIR = Path(__file__).resolve().parent.parent / "pin_cache"
+
+
+def _is_on_connect() -> bool:
+    """Detect whether we're running on Posit Connect."""
+    return bool(os.environ.get("CONNECT_SERVER"))
+
+
+def get_board() -> pins.BaseBoard:
+    """Return the appropriate pins board for the current environment.
+
+    On Connect: ``board_connect()`` using env vars.
+    Locally: ``board_folder()`` writing to ``pin_cache/``.
+    """
+    if _is_on_connect():
+        logger.info("Using Posit Connect pins board")
+        return pins.board_connect(
+            server_url=os.environ["CONNECT_SERVER"],
+            api_key=os.environ.get("CONNECT_API_KEY", ""),
+            allow_pickle_read=False,
+        )
+    else:
+        _LOCAL_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+        logger.info("Using local pins board at %s", _LOCAL_CACHE_DIR)
+        return pins.board_folder(_LOCAL_CACHE_DIR, allow_pickle_read=False)
+
+
+def _pin_name(name: str) -> str:
+    """Build the full pin name with prefix."""
+    return f"{PIN_PREFIX}/{name}"
 
 
 class PinWriter:
-    """Write and version datasets as Parquet files in a local cache directory."""
+    """Write DataFrames to the pins board."""
 
-    def __init__(self, cache_dir: str | Path | None = None):
-        self.cache_dir = Path(cache_dir) if cache_dir else _DEFAULT_CACHE_DIR
-        self.cache_dir.mkdir(parents=True, exist_ok=True)
+    def __init__(self):
+        self.board = get_board()
 
-    def write_pin(self, name: str, df: pd.DataFrame) -> Path:
-        """Write a DataFrame as a versioned pin (Parquet file).
+    def write_pin(self, name: str, df: pd.DataFrame) -> None:
+        """Write a DataFrame as a pin.
 
-        Creates: ``<cache_dir>/<name>/data.parquet`` and a metadata JSON.
+        Args:
+            name: Short pin name (e.g. ``"rankings"``). Will be prefixed
+                  with ``ncaa_wrestling/``.
+            df: The DataFrame to persist.
         """
-        pin_dir = self.cache_dir / name
-        pin_dir.mkdir(parents=True, exist_ok=True)
-
-        data_path = pin_dir / "data.parquet"
-        meta_path = pin_dir / "meta.json"
-
-        df.to_parquet(data_path, index=False)
-
-        meta = {
-            "name": name,
-            "rows": len(df),
-            "columns": list(df.columns),
-            "updated_at": datetime.utcnow().isoformat(),
-        }
-        meta_path.write_text(json.dumps(meta, indent=2))
-
-        logger.info("Wrote pin '%s': %d rows → %s", name, len(df), data_path)
-        return data_path
+        full_name = _pin_name(name)
+        self.board.pin_write(df, full_name, type="parquet")
+        logger.info("Wrote pin '%s': %d rows", full_name, len(df))
 
     def pin_exists(self, name: str) -> bool:
-        return (self.cache_dir / name / "data.parquet").exists()
+        """Check if a pin exists on the board."""
+        full_name = _pin_name(name)
+        try:
+            existing = self.board.pin_list()
+            return full_name in existing
+        except Exception:
+            return False
 
     def get_pin_meta(self, name: str) -> dict | None:
-        meta_path = self.cache_dir / name / "meta.json"
-        if meta_path.exists():
-            return json.loads(meta_path.read_text())
-        return None
+        """Read pin metadata (version info, created time)."""
+        full_name = _pin_name(name)
+        try:
+            meta = self.board.pin_meta(full_name)
+            return {
+                "name": full_name,
+                "created": str(meta.created),
+                "version": str(meta.version),
+            }
+        except Exception:
+            return None

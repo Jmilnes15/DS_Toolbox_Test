@@ -1,12 +1,21 @@
 """NCAA D1 Wrestling Tracker — Shiny for Python application.
 
 Main entry point that assembles the multi-page app with navbar navigation.
+
+Deployment:
+    rsconnect deploy shiny --entrypoint app/app.py ncaa-wrestling-app/
+
+Environment variables (set in Connect content settings):
+    CONNECT_SERVER   — auto-injected by Posit Connect
+    CONNECT_API_KEY  — your Connect API key (for reading pins)
 """
 
 import sys
 from pathlib import Path
 
-# Ensure project root is on the path for imports
+# Ensure project root is on sys.path so all imports resolve on Connect.
+# On Connect the working directory is the content bundle root, which is
+# the ``ncaa-wrestling-app/`` directory.
 _project_root = Path(__file__).resolve().parent.parent
 if str(_project_root) not in sys.path:
     sys.path.insert(0, str(_project_root))
