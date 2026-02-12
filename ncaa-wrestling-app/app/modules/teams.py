@@ -21,7 +21,7 @@ def teams_ui():
         ),
         ui.row(
             ui.column(
-                3,
+                {"class": "col-12 col-lg-3 mb-3"},
                 ui.div(
                     ui.input_select(
                         "view_type",
@@ -40,7 +40,7 @@ def teams_ui():
                 ),
             ),
             ui.column(
-                9,
+                {"class": "col-12 col-lg-9"},
                 ui.output_ui("teams_table"),
             ),
         ),

@@ -12,7 +12,7 @@ def live_scores_ui():
     return ui.page_fluid(
         ui.row(
             ui.column(
-                8,
+                {"class": "col-12 col-md-8 mb-2"},
                 ui.h3("Live Scores"),
                 ui.p(
                     ui.output_text("live_updated"),
@@ -20,13 +20,12 @@ def live_scores_ui():
                 ),
             ),
             ui.column(
-                4,
+                {"class": "col-12 col-md-4 mb-2"},
                 ui.div(
                     ui.input_action_button(
                         "refresh_btn",
                         "Refresh Scores",
                         class_="btn btn-primary btn-sm",
-                        style="float:right; margin-top:1rem;",
                     ),
                     ui.input_select(
                         "status_filter",
@@ -34,17 +33,17 @@ def live_scores_ui():
                         choices={"all": "All Games", "live": "Live Now", "final": "Final",
                                  "upcoming": "Upcoming"},
                         selected="all",
-                        width="150px",
+                        width="100%",
                     ),
-                    style="text-align:right;",
+                    class_="d-flex flex-wrap gap-2 align-items-end justify-content-md-end",
                 ),
             ),
         ),
         # Summary stats
         ui.row(
-            ui.column(4, ui.output_ui("live_count_box")),
-            ui.column(4, ui.output_ui("final_count_box")),
-            ui.column(4, ui.output_ui("upcoming_count_box")),
+            ui.column(4, ui.output_ui("live_count_box"), {"class": "col-4 mb-2"}),
+            ui.column(4, ui.output_ui("final_count_box"), {"class": "col-4 mb-2"}),
+            ui.column(4, ui.output_ui("upcoming_count_box"), {"class": "col-4 mb-2"}),
             style="margin-bottom:1rem;",
         ),
         # Score cards

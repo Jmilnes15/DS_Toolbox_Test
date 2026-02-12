@@ -25,16 +25,16 @@ def dashboard_ui():
         ),
         # Summary value boxes
         ui.row(
-            ui.column(3, ui.output_ui("vb_top_team")),
-            ui.column(3, ui.output_ui("vb_teams_ranked")),
-            ui.column(3, ui.output_ui("vb_live_matches")),
-            ui.column(3, ui.output_ui("vb_upcoming")),
+            ui.column(6, ui.output_ui("vb_top_team"), {"class": "col-lg-3 mb-2"}),
+            ui.column(6, ui.output_ui("vb_teams_ranked"), {"class": "col-lg-3 mb-2"}),
+            ui.column(6, ui.output_ui("vb_live_matches"), {"class": "col-lg-3 mb-2"}),
+            ui.column(6, ui.output_ui("vb_upcoming"), {"class": "col-lg-3 mb-2"}),
         ),
         ui.br(),
         # Two-column layout: Rankings + Recent Results
         ui.row(
             ui.column(
-                6,
+                {"class": "col-12 col-lg-6 mb-3"},
                 ui.div(
                     ui.div("Top 10 Rankings", class_="card-header"),
                     ui.div(
@@ -46,7 +46,7 @@ def dashboard_ui():
                 ),
             ),
             ui.column(
-                6,
+                {"class": "col-12 col-lg-6 mb-3"},
                 ui.div(
                     ui.div("Recent Results", class_="card-header"),
                     ui.div(

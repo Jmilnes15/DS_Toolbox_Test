@@ -22,7 +22,7 @@ def brackets_ui():
         ),
         ui.row(
             ui.column(
-                3,
+                {"class": "col-12 col-lg-3 mb-3"},
                 ui.div(
                     ui.input_select(
                         "weight_class",
@@ -53,7 +53,7 @@ def brackets_ui():
                 ),
             ),
             ui.column(
-                9,
+                {"class": "col-12 col-lg-9"},
                 ui.output_ui("bracket_view"),
             ),
         ),

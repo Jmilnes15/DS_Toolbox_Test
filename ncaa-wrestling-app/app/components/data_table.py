@@ -21,7 +21,11 @@ def render_dataframe_html(df: pd.DataFrame, max_rows: int = 100) -> ui.Tag:
         escape=False,
         border=0,
     )
-    return ui.HTML(html_str)
+    # Wrap in a scrollable container for mobile
+    return ui.div(
+        ui.HTML(html_str),
+        style="overflow-x:auto; -webkit-overflow-scrolling:touch;",
+    )
 
 
 def empty_state(message: str = "No data available") -> ui.Tag:

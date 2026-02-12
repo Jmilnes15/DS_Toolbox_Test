@@ -28,6 +28,7 @@ from app.modules.schedule import schedule_server, schedule_ui
 from app.modules.teams import teams_server, teams_ui
 from app.modules.live_scores import live_scores_server, live_scores_ui
 from app.modules.brackets import brackets_server, brackets_ui
+from app.modules.how_it_works import how_it_works_server, how_it_works_ui
 
 app_ui = ui.page_navbar(
     # Dashboard
@@ -60,6 +61,12 @@ app_ui = ui.page_navbar(
         "Brackets",
         brackets_ui("brackets"),
     ),
+    # Separator + How It Works
+    ui.nav_spacer(),
+    ui.nav_panel(
+        "How It Works",
+        how_it_works_ui("how_it_works"),
+    ),
     title=ui.div(
         ui.span("NCAA Wrestling Tracker", style="font-weight:700;"),
         style="display:flex; align-items:center; gap:0.5rem;",
@@ -67,6 +74,7 @@ app_ui = ui.page_navbar(
     id="main_nav",
     theme=ui.Theme("flatly"),
     header=ui.head_content(
+        ui.tags.meta(name="viewport", content="width=device-width, initial-scale=1"),
         ui.include_css(Path(__file__).parent / "styles.css"),
     ),
     footer=ui.div(
@@ -84,6 +92,7 @@ def server(input, output, session):
     teams_server("teams")
     live_scores_server("live_scores")
     brackets_server("brackets")
+    how_it_works_server("how_it_works")
 
 
 app = App(app_ui, server)

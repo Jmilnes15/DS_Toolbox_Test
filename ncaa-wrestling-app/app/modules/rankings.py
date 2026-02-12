@@ -22,7 +22,7 @@ def rankings_ui():
         ),
         ui.row(
             ui.column(
-                3,
+                {"class": "col-12 col-lg-3 mb-3"},
                 ui.div(
                     ui.input_numeric("top_n", "Show Top N", value=25, min=5, max=100, step=5),
                     ui.input_text("search_team", "Search Team", placeholder="e.g. Penn St."),
@@ -30,7 +30,7 @@ def rankings_ui():
                 ),
             ),
             ui.column(
-                9,
+                {"class": "col-12 col-lg-9"},
                 ui.output_ui("rankings_table"),
             ),
         ),
