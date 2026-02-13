@@ -1,0 +1,202 @@
+---
+title: "Clinical Control Tower - ETL Pipeline Report"
+subtitle: "Data Ingestion, Transformation & Model Refresh"
+author: "Clinical Data Science Team"
+date: today
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-depth: 3
+    code-fold: true
+    code-summary: "Show pipeline code"
+    self-contained: true
+execute:
+  echo: true
+  warning: false
+---
+
+## Pipeline Overview
+
+This report documents the ETL pipeline that powers the Clinical Control Tower.
+When deployed on **Posit Connect**, this Quarto document runs on a scheduled
+cadence (e.g., daily at 6 AM UTC) to refresh all data sources and retrain
+predictive models.
+
+::: {.callout-note}
+## Posit Connect Value
+Traditional ETL pipelines require separate infrastructure (Airflow, cron jobs,
+custom CI/CD). With **Posit Connect**, this entire pipeline is a single Quarto
+document that is versioned, scheduled, and monitored—with email alerts on failure
+and a full audit trail of every execution.
+:::
+
+```{python}
+import pandas as pd
+import numpy as np
+import json
+import os
+from datetime import datetime
+
+print(f"Pipeline execution started: {datetime.now().isoformat()}")
+print(f"Python environment: {os.sys.version}")
+```
+
+## Step 1: Data Ingestion
+
+In production, this step would connect to source systems:
+
+- **CTMS** (Clinical Trial Management System) — study & site metadata
+- **EDC** (Electronic Data Capture) — patient enrollment & CRF data
+- **IRT/RTSM** — randomization & drug supply
+- **Central Labs** — lab data feeds
+- **Financial Systems** — budget & spend tracking
+
+For this demo, we generate realistic simulated data.
+
+```{python}
+#| label: data-ingestion
+
+# In production, these would be database connections or API calls:
+# from sqlalchemy import create_engine
+# engine = create_engine(os.environ["CTMS_DATABASE_URL"])
+# studies = pd.read_sql("SELECT * FROM studies", engine)
+
+# Demo: load from generated CSVs
+data_dir = os.path.join(os.path.dirname("."), "..", "data")
+studies = pd.read_csv(os.path.join(data_dir, "studies.csv"))
+sites = pd.read_csv(os.path.join(data_dir, "sites.csv"))
+enrollment = pd.read_csv(os.path.join(data_dir, "enrollment_timeseries.csv"))
+signals = pd.read_csv(os.path.join(data_dir, "risk_signals.csv"))
+
+print(f"Studies loaded: {len(studies)}")
+print(f"Sites loaded: {len(sites)}")
+print(f"Enrollment records: {len(enrollment)}")
+print(f"Risk signals: {len(signals)}")
+```
+
+## Step 2: Data Quality Checks
+
+Automated validation ensures data integrity before downstream processing.
+
+```{python}
+#| label: data-quality
+
+checks = []
+
+# Check 1: No null study IDs
+null_ids = studies["study_id"].isnull().sum()
+checks.append({"check": "No null study IDs", "passed": null_ids == 0, "detail": f"{null_ids} nulls found"})
+
+# Check 2: Enrollment within bounds
+over_target = (studies["current_enrollment"] > studies["target_enrollment"]).sum()
+checks.append({"check": "Enrollment <= target", "passed": over_target == 0, "detail": f"{over_target} violations"})
+
+# Check 3: Valid dates
+studies["start_dt"] = pd.to_datetime(studies["start_date"])
+invalid_dates = (studies["start_dt"] > datetime.now()).sum()
+checks.append({"check": "Start dates in past", "passed": invalid_dates == 0, "detail": f"{invalid_dates} future dates"})
+
+# Check 4: Site quality scores in range
+out_of_range = ((sites["quality_score"] < 0) | (sites["quality_score"] > 1)).sum()
+checks.append({"check": "Quality scores 0-1", "passed": out_of_range == 0, "detail": f"{out_of_range} out of range"})
+
+checks_df = pd.DataFrame(checks)
+checks_df["status"] = checks_df["passed"].map({True: "PASS", False: "FAIL"})
+checks_df[["check", "status", "detail"]]
+```
+
+## Step 3: Feature Engineering
+
+Transform raw operational data into ML-ready features for the predictive models.
+
+```{python}
+#| label: feature-engineering
+
+# Enrollment velocity features
+enrollment["enrollment_ratio"] = enrollment["cumulative_enrolled"] / enrollment["target_enrollment"].clip(lower=1)
+enrollment["gap_ratio"] = enrollment["enrollment_gap"] / enrollment["target_enrollment"].clip(lower=1)
+enrollment["week_sin"] = np.sin(2 * np.pi * enrollment["week"] / 52)
+enrollment["week_cos"] = np.cos(2 * np.pi * enrollment["week"] / 52)
+
+# Site composite features
+sites["monitoring_completion"] = sites["monitoring_visits_completed"] / sites["monitoring_visits_planned"].clip(lower=1)
+sites["deviation_rate"] = sites["protocol_deviations"] / sites["patients_enrolled"].clip(lower=1)
+
+print(f"Engineered {4} enrollment features and {2} site features")
+print(f"Feature matrix shape: enrollment={enrollment.shape}, sites={sites.shape}")
+```
+
+## Step 4: Model Refresh
+
+Retrain predictive models with latest data. Models are versioned and stored
+using **Pins** for reproducibility.
+
+```{python}
+#| label: model-training
+
+# In production, this would call the model training pipeline
+# and store results via pins + vetiver:
+#
+# import pins
+# import vetiver
+#
+# board = pins.board_connect(server_url=os.environ["CONNECT_SERVER"])
+# model = train_enrollment_forecaster()
+# v = vetiver.VetiverModel(model, "enrollment-forecaster")
+# vetiver.vetiver_pin_write(board, v)
+
+print("Model training would execute here in production.")
+print("Models stored via: vetiver.vetiver_pin_write(board, model)")
+print("API updated via: vetiver.deploy_connect(board, 'enrollment-forecaster')")
+```
+
+## Step 5: Signal Detection
+
+Run automated risk detection algorithms against fresh data.
+
+```{python}
+#| label: signal-detection
+
+# Enrollment signals
+enrolling_studies = studies[studies["status"] == "Enrolling"]
+at_risk = enrolling_studies[enrolling_studies["risk_score"] > 0.65]
+
+print(f"Active enrolling studies: {len(enrolling_studies)}")
+print(f"Studies at elevated risk: {len(at_risk)}")
+
+if len(at_risk) > 0:
+    print("\nHigh-risk studies:")
+    for _, s in at_risk.iterrows():
+        print(f"  {s['study_id']}: risk={s['risk_score']:.2f}, enrolled={s['enrollment_pct']}%")
+```
+
+## Pipeline Summary
+
+```{python}
+#| label: summary
+
+summary = {
+    "pipeline_run": datetime.now().isoformat(),
+    "data_quality_checks": f"{checks_df['passed'].sum()}/{len(checks_df)} passed",
+    "studies_processed": len(studies),
+    "sites_processed": len(sites),
+    "signals_generated": len(signals),
+    "status": "SUCCESS" if checks_df["passed"].all() else "WARNING",
+}
+
+for k, v in summary.items():
+    print(f"  {k}: {v}")
+```
+
+::: {.callout-tip}
+## Deployment on Posit Connect
+
+This report is deployed to Posit Connect where it:
+
+1. **Runs on schedule** — daily/hourly refresh with no external scheduler needed
+2. **Sends alerts** — email notifications on pipeline failures
+3. **Maintains history** — every execution is versioned and auditable
+4. **Secures access** — role-based access ensures only authorized users see data
+5. **Scales automatically** — Connect manages compute resources
+:::

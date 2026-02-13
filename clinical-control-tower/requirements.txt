@@ -1,0 +1,11 @@
+shiny>=1.0.0
+shinywidgets>=0.3.0
+pandas>=2.0.0
+numpy>=1.24.0
+scikit-learn>=1.3.0
+plotly>=5.18.0
+pins>=0.8.0
+vetiver>=0.2.0
+faicons>=0.2.0
+htmltools>=0.5.0
+scipy>=1.11.0

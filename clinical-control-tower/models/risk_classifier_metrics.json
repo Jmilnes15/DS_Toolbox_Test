@@ -1,0 +1,30 @@
+{
+  "model_type": "RandomForestClassifier",
+  "accuracy_mean": 0.5812,
+  "accuracy_std": 0.0139,
+  "n_samples": 597,
+  "features": [
+    "enrollment_rate_per_month",
+    "screen_fail_rate",
+    "query_rate_per_100_crfs",
+    "protocol_deviations",
+    "major_deviations",
+    "days_to_activate",
+    "monitoring_visits_completed"
+  ],
+  "feature_importance": {
+    "enrollment_rate_per_month": 0.1897,
+    "screen_fail_rate": 0.2034,
+    "query_rate_per_100_crfs": 0.179,
+    "protocol_deviations": 0.0853,
+    "major_deviations": 0.0388,
+    "days_to_activate": 0.1957,
+    "monitoring_visits_completed": 0.108
+  },
+  "classes": [
+    "High Risk",
+    "Low Risk",
+    "Medium Risk"
+  ],
+  "trained_at": "2026-02-13T01:28:11.714292"
+}

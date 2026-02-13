@@ -1,0 +1,16 @@
+{
+  "model_type": "GradientBoostingRegressor",
+  "r2_mean": -0.022,
+  "r2_std": 0.7633,
+  "n_samples": 1208,
+  "features": [
+    "week",
+    "cumulative_enrolled",
+    "enrollment_ratio",
+    "gap_ratio",
+    "target_enrollment",
+    "week_sin",
+    "week_cos"
+  ],
+  "trained_at": "2026-02-13T01:28:10.391727"
+}
