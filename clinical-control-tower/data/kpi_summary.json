@@ -1,0 +1,18 @@
+{
+  "total_studies": 12,
+  "enrolling_studies": 5,
+  "total_sites_active": 597,
+  "total_countries": 113,
+  "total_enrolled": 11758,
+  "total_target": 19176,
+  "overall_enrollment_pct": 61.3,
+  "avg_risk_score": 0.343,
+  "high_risk_studies": 1,
+  "open_signals": 31,
+  "critical_signals": 1,
+  "avg_site_quality": 0.742,
+  "total_budget_mm": 901.6,
+  "total_spend_mm": 639.7,
+  "budget_utilization_pct": 71.0,
+  "generated_at": "2026-02-13T01:27:08.566663"
+}

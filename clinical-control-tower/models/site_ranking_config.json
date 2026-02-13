@@ -1,0 +1,19 @@
+{
+  "n_sites_ranked": 597,
+  "tier_distribution": {
+    "Good": 321,
+    "Below Average": 256,
+    "Top Performer": 16,
+    "Underperforming": 4
+  },
+  "avg_composite_score": 0.5698,
+  "weights_used": {
+    "enrollment_score": 0.25,
+    "quality_norm": 0.2,
+    "screen_fail_score": 0.15,
+    "query_score": 0.15,
+    "deviation_score": 0.15,
+    "activation_score": 0.1
+  },
+  "computed_at": "2026-02-13T01:28:11.755856"
+}
